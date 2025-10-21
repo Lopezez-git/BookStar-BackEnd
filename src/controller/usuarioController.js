@@ -26,6 +26,7 @@ endPoints.post('/usuario/cadastro', async (req, resp) => {
         resp.status(500).send("Dados já existentes");
     }
 
+    
 });
 
 

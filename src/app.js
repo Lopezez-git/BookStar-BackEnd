@@ -15,7 +15,7 @@ servidor.use(cors());
 
 servidor.use(express.json());
 
-//Usando o arquivo de rotas (router.js)
+//Usando o arquivo de rotas (router.js);
 
 rotas(servidor);
 

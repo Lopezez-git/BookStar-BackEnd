@@ -8,6 +8,8 @@ import cors from 'cors'
 
 let servidor = express();
 
+// ultilizando cors para qualquer porta poder acesssar a API
+
 servidor.use(cors());
 
 servidor.use(express.json());

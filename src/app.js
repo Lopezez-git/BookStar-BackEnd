@@ -4,7 +4,11 @@ import express from 'express';
 
 import { rotas } from './routers.js';
 
+import cors from 'cors'
+
 let servidor = express();
+
+servidor.use(cors());
 
 servidor.use(express.json());
 

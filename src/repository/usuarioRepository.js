@@ -18,7 +18,7 @@ values(?, ?, ?, MD5(?),? , ? ,now(), now())`;
         usuario.bio || null,
         usuario.imagem_perfil || null]);
 
-        return "usuario cadastrado: " + info.insertId;
+        return info.insertId;
     }
     catch (err) {
         

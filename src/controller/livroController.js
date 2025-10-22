@@ -17,7 +17,7 @@ endPoints.post("/popular-livros", async (req, res) => {
 
     // pegando a URL da Api do google
     const response = await axios.get("https://www.googleapis.com/books/v1/volumes", {
-      params: { q, maxResults: 1 }// <== Quantidade maxima de inserts no banco
+      params: { q, maxResults: 10}// <== Quantidade maxima de inserts no banco
     });
 
     if (!response.data.items) {

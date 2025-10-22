@@ -1,6 +1,10 @@
 import { Router } from "express";
 
-import { inserirUsuario } from "../repository/usuarioRepository.js";
+import { inserirUsuario, verificarUsuario} from "../repository/usuarioRepository.js";
+
+import {gerarToken} from "../services/jwt.js";
+
+import autenticar from "../middlewares/autenticar.js";
 
 let endPoints = Router();
 
@@ -21,13 +25,60 @@ endPoints.post('/usuario/cadastro', async (req, resp) => {
             resp.send(saidaDb);
         }
     }
-    catch(err){
+    catch (err) {
         console.error("Deu erro no endPoint /usuario/post", err);
         resp.status(500).send("Dados já existentes");
     }
 
-    
 });
+
+//endPoint de login
+
+endPoints.post('/login/usuario', async (req, resp) => {
+    //Em dev
+    try {
+        const {email, senha} = req.body;
+
+        if (!email || !senha) {
+
+            resp.status(400).send({ erro: 'Não está contendo uma das informações' })
+        }
+
+        let usuario = await verificarUsuario(email, senha);
+
+        if(!usuario){
+            resp.status(400).send({erro: 'Email ou senha incorretos'});
+        }
+
+        let token = gerarToken(usuario);
+
+        if(!token){
+
+            resp.status(400).send({erro: 'O token não foi gerado'})
+        }
+
+        resp.send({mensagem: 'Login realizado com sucesso',
+            token,
+            usuario: {
+                id: usuario.id,
+                nome: usuario.nome,
+                email: usuario.email
+            }
+        });
+
+
+    } catch (err) {
+
+    }
+});
+
+endPoints.get('/usuario/perfil', autenticar, (req, resp) => {
+
+    let saida = 5 + 8;
+
+    resp.send({resultado: saida})
+
+})
 
 
 export default endPoints;

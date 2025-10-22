@@ -46,6 +46,7 @@ endPoints.post("/popular-livros", async (req, res) => {
       };
     });
 
+    //inseri o obj no banco
     await popularLivros(livros);
 
     res.json({ 

@@ -21,4 +21,4 @@ rotas(servidor);
 
 let PORT = process.env.PORT;
 
-servidor.listen(PORT, () => console.log("Servidor aberto na porta: " + PORT));
+servidor.listen(PORT, () => console.log(`A porta -> ${PORT} <- está aberta`));

@@ -9,7 +9,7 @@ export function gerarToken(usuario) {
         email: usuario.email
     },
         SECRET_KEY,
-        { expiresIn: '1h' });
+        { expiresIn: '24h' });
 
         return token;
 

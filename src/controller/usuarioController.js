@@ -34,7 +34,7 @@ endPoints.post('/usuario/cadastro', async (req, resp) => {
 
 //endPoint de login
 
-endPoints.post('/login/usuario', async (req, resp) => {
+endPoints.post('/usuario/login', async (req, resp) => {
     //Em dev
     try {
         const {email, senha} = req.body;

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import axios from "axios";
-import popularLivros from "../repository/livroRepository.js";
+import {popularLivros} from "../repository/livroRepository.js";
 import { formatarData } from "../services/dataFormat.js";
 
 let endPoints = Router();

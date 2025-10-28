@@ -1,7 +1,7 @@
 
 import connection from "./connection.js";
 
-export default async function popularLivros(livros) {
+export async function popularLivros(livros) {
 
     for (const livro of livros) {
       await connection.query(
@@ -24,3 +24,4 @@ export default async function popularLivros(livros) {
     
 
 }
+

@@ -1,5 +1,7 @@
 import connection from './connection.js';
 
+import autenticar from '../middlewares/autenticar.js';
+
 /**
  * Adiciona um livro à biblioteca do usuário
  * @param {number} idUsuario - ID do usuário

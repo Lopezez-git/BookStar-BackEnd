@@ -1,5 +1,7 @@
 import { Router } from "express";
 
+import autenticar from "../middlewares/autenticar.js";
+
 let endPoints = Router();
 
 endPoints.get('/livros/buscar', autenticar, async (req, resp) => {

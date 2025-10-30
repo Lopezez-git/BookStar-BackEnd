@@ -1,6 +1,7 @@
 //Importar todos os endPoints
 import usuarioController from './controller/usuarioController.js'
 import livroController from './controller/livroController.js'
+import bibliotecaController from './controller/bibliotecaController.js'
 
 export function rotas(servidor){
 
@@ -9,4 +10,6 @@ export function rotas(servidor){
     servidor.use(livroController);
 
     servidor.use(usuarioController);
+
+    servidor.use(bibliotecaController);
 }

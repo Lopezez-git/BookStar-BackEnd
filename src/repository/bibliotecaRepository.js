@@ -54,8 +54,8 @@ export async function adicionarLivroBiblioteca(idUsuario, livro, status = 'quero
 
     // Adiciona à biblioteca do usuário
     const [resultado] = await connection.query(
-        `INSERT INTO biblioteca_usuario (id_usuario, id_livro, status, dataInicio)
-         VALUES (?, ?, ?, NOW())`,
+        `INSERT INTO biblioteca_usuario (id_usuario, id_livro, status, dataInicio, dataCriacao)
+         VALUES (?, ?, ?, NOW(), NOW())`,
         [idUsuario, idLivro, status]
     );
 

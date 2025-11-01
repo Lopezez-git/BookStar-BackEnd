@@ -4,15 +4,6 @@ import { inserirUsuario, verificarUsuario} from "../repository/usuarioRepository
 
 import {gerarToken} from "../services/jwt.js";
 
-import { buscarLivros, buscarLivroPorId } from "../services/googleBooksService.js";
-
-import { adicionarLivroBiblioteca,
-     listarBibliotecaUsuario,
-     atualizarStatusLivro,
-      avaliarLivro,
-      removerLivroBiblioteca,
-       obterEstatisticasBiblioteca } from "../repository/bibliotecaRepository.js";
-
 import autenticar from "../middlewares/autenticar.js";
 
 let endPoints = Router();

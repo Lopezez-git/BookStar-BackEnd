@@ -43,6 +43,8 @@ endPoints.get('/livros/buscar', autenticar, async (req, resp) => {
     }
 });
 
+//add livro na biblioteca
+
 endPoints.post('/usuario/biblioteca/post', autenticar, async (req, resp) => {
     try {
         const idUsuario = req.usuario.id;
@@ -95,6 +97,8 @@ endPoints.post('/usuario/biblioteca/post', autenticar, async (req, resp) => {
         });
     }
 });
+
+//listar todos os livros add na biblioteca do usuario
 
 endPoints.get('/usuario/biblioteca', autenticar, async (req, resp) => {
     try {

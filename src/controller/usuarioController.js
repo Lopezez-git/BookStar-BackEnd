@@ -22,7 +22,7 @@ endPoints.post('/usuario/cadastro', async (req, resp) => {
             resp.status(400).send("Erro ao inserir");
         }
         else {
-            resp.send(saidaDb);
+            resp.send({mensagem: "Id do novo usuario: " + saidaDb});
         }
     }
     catch (err) {
@@ -71,6 +71,23 @@ endPoints.post('/usuario/login', async (req, resp) => {
 
     }
 });
+
+endPoints.get('/usuario/perfil', autenticar, async(req, resp) => {
+
+    try{
+
+        let usuario = req.usuario;
+
+        //função do repository para retornar as informações do usuario;
+
+        let select = null;
+    }
+    catch(err){
+
+
+    }
+
+})
 
 
 

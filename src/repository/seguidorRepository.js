@@ -75,3 +75,18 @@ export async function deixarDeSeguirUsuario(seguidor, seguidoUsername) {
   }
 }
 
+export default async function buscarSeguidores(id_seguido) {
+
+  let comando = `SELECT seguidor.nome AS 'Quem Segue', seguido.nome AS 'Quem É Seguido'
+FROM
+    seguidores
+    INNER JOIN usuario AS seguidor ON seguidores.id_seguidor = seguidor.id
+    INNER JOIN usuario AS seguido ON seguidores.id_seguido = seguido.id
+WHERE
+    seguido.id = ?`;
+
+  let [select] = await connection.query(comando, [id_seguido]);
+
+  return select;
+}
+

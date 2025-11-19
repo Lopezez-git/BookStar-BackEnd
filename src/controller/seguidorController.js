@@ -1,6 +1,6 @@
 import { Router } from "express";
 import autenticar from "../middlewares/autenticar.js";
-import { seguirUsuario, deixarDeSeguirUsuario } from "../repository/seguidorRepository.js";
+import buscarSeguidores, { seguirUsuario, deixarDeSeguirUsuario } from "../repository/seguidorRepository.js";
 
 let endPoints = Router();
 
@@ -53,6 +53,21 @@ endPoints.post('/usuario/deixar-de-seguir', autenticar, async (req, resp) => {
     });
   }
 });
+
+endPoints.get('/usuario/show-seguidores', autenticar, async (req, resp) => {
+
+  let usuario = req.usuario;
+
+  let select = await buscarSeguidores(usuario.id);
+
+  if (select.length === 0) {
+
+    return resp.status(400).send({ mensagem: "Esse usuario não seguidores" });
+  }
+
+  resp.send(select);
+
+})
 
 
 

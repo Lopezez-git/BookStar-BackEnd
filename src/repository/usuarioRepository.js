@@ -57,10 +57,9 @@ export default async function getPerfil(id_usuario) {
 
     try{
 
-        let comando = `Select usuario.nome, usuario.imagem_perfil,
-        count(usuario.id) as seguidores,
-        count(usuario.id) as seguindo
-        from usuario`;
+        //Em dev
+
+        let comando = ``;
     }
     catch(err){
 

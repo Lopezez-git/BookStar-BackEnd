@@ -43,26 +43,50 @@ export async function verificarUsuario(email, senha) {
 
     let [info] = await connection.query(comando, [email, senha]);
 
-    if(info.length > 0){
+    if (info.length > 0) {
 
         return info[0];
     }
-    else{
+    else {
         return null;
     }
-    
+
 }
 
 export default async function getPerfil(id_usuario) {
 
-    try{
+    try {
 
         //Em dev
 
-        let comando = ``;
-    }
-    catch(err){
+        let comando = `SELECT 
+    u.id,
+    u.nome,
+    u.imagem_perfil,
+
+    
+    (
+        SELECT COUNT(*) 
+        FROM seguidores s 
+        WHERE s.id_seguido = u.id
+    ) AS seguidores,
+
+    (
+        SELECT COUNT(*) 
+        FROM seguidores s 
+        WHERE s.id_seguidor = u.id
+    ) AS seguindo
+
+FROM usuario u
+WHERE u.id = ?;`;
+
+        let [select] = await connection.query(comando, [id_usuario])
+
+        return select;
 
     }
-    
+    catch (err) {
+        console.log("Erro no servidor interno (Repository)", err);
+    }
+
 }

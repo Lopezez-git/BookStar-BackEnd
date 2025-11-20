@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { inserirUsuario, verificarUsuario} from "../repository/usuarioRepository.js";
+import getPerfil, { inserirUsuario, verificarUsuario} from "../repository/usuarioRepository.js";
 
 import {gerarToken} from "../services/jwt.js";
 
@@ -80,10 +80,18 @@ endPoints.get('/usuario/perfil', autenticar, async(req, resp) => {
 
         //função do repository para retornar as informações do usuario;
 
-        let select = null;
+        let select = await getPerfil(usuario.id);
+
+        if(select.length === 0){
+
+            return resp.status(400).send({Erro: "Erro ao retornar usuario"});
+        }
+
+        resp.send(select[0])
     }
     catch(err){
 
+        console.log("Erro no controller", err);
 
     }
 

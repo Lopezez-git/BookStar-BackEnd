@@ -90,3 +90,18 @@ WHERE u.id = ?;`;
     }
 
 }
+
+//Atualizar a foto de perfil e add no banco de dados
+
+export async function atualizarFotoDePerfil(imagem, id_usuario) {
+    
+    let comando = `UPDATE usuario SET imagem_perfil = ? WHERE id = ?`;
+
+    let [update] = await connection.query(comando, [imagem, id_usuario]);
+
+    comando = `SELECT * FROM usuario WHERE id = ?`;
+
+    let [select] = await connection.query(comando, [id_usuario]);
+
+    return select;
+}

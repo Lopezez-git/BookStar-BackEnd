@@ -1,12 +1,18 @@
 import { Router } from "express";
 
-import getPerfil, { inserirUsuario, verificarUsuario} from "../repository/usuarioRepository.js";
+import getPerfil, { atualizarFotoDePerfil, inserirUsuario, verificarUsuario} from "../repository/usuarioRepository.js";
 
 import {gerarToken} from "../services/jwt.js";
 
 import autenticar from "../middlewares/autenticar.js";
 
+import multer from "multer";
+
+import path from "path";
+
 let endPoints = Router();
+
+let uploadPErfil = multer({dest: path.resolve('storage', 'perfil')});
 
 //EndPoint de cadastro
 
@@ -95,7 +101,29 @@ endPoints.get('/usuario/perfil', autenticar, async(req, resp) => {
 
     }
 
-})
+});
+
+
+//Adicionando uma foto de perfil
+
+endPoints.post('/usuario/perfil/capa', autenticar, uploadPErfil.single('imagem'), async(req, resp) =>{
+
+    let imagem = req.file.filename;
+
+    console.log("Nome do arquivo: " + imagem);
+
+    //função para salvar a imagem no banco
+
+    let saida = await atualizarFotoDePerfil(imagem, req.usuario.id);
+
+    if(saida.length === 0){
+
+       return resp.status(400).send({Erro: "Erro ao atualizar a foto de perfil"});
+    }
+
+    resp.send(saida[0]);
+
+});
 
 
 

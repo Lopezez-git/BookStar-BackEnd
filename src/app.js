@@ -10,6 +10,8 @@ import cors from 'cors'
 
 let servidor = express();
 
+//liberando a pasta storage/perfil
+
 servidor.use('/storage/perfil', express.static(path.join(process.cwd(), 'storage', 'perfil')));
 
 // ultilizando cors para qualquer porta poder acesssar a API

@@ -106,7 +106,7 @@ endPoints.get('/usuario/perfil', autenticar, async(req, resp) => {
 
 //Adicionando uma foto de perfil
 
-endPoints.post('/usuario/perfil/capa', autenticar, uploadPErfil.single('imagem'), async(req, resp) =>{
+endPoints.put('/usuario/perfil/capa', autenticar, uploadPErfil.single('imagem'), async(req, resp) =>{
 
     let imagem = req.file.filename;
 

@@ -2,16 +2,15 @@ import 'dotenv/config'
 
 import express from 'express';
 
-import multer from 'multer';
-
-
-
+import path from 'path'
 
 import { rotas } from './routers.js';
 
 import cors from 'cors'
 
 let servidor = express();
+
+servidor.use('/storage/perfil', express.static(path.join(process.cwd(), 'storage', 'perfil')));
 
 // ultilizando cors para qualquer porta poder acesssar a API
 

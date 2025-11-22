@@ -13,6 +13,7 @@ let servidor = express();
 //liberando a pasta storage/perfil
 
 servidor.use('/storage/perfil', express.static(path.join(process.cwd(), 'storage', 'perfil')));
+servidor.use('/storage/capa', express.static(path.join(process.cwd(), 'storage', 'capa')));
 
 // ultilizando cors para qualquer porta poder acesssar a API
 

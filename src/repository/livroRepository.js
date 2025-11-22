@@ -1,27 +1,13 @@
 
 import connection from "./connection.js";
 
-export async function popularLivros(livros) {
+export async function buscarLivroPorTitulo(titulo_livro) {
 
-    for (const livro of livros) {
-      await connection.query(
-        `INSERT INTO livro
-        (titulo, google_book_id, descricao, capa_url, dataPublic, paginas, idioma) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [
-          livro.titulo,
-          livro.google_book_id,
-          livro.descricao,
-          livro.capa_url,
-          livro.dataPublic,
-          livro.paginas,
-          livro.idioma
-        ]
-      );
-    }
+    let comando = `SELECT * FROM livro WHERE titulo = ?`;
 
-    return true;
-    
+    let [select] = await connection.query(comando, [titulo_livro]);
+
+    return select;
 
 }
 

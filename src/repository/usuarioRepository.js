@@ -6,8 +6,8 @@ export async function inserirUsuario(usuario) {
 
     try {
 
-        let comando = `INSERT into usuario(nome, username, email, senha_hash, bio, imagem_perfil, dataCriacao, dataAtualiza)
-values(?, ?, ?, MD5(?),? , ? ,now(), now())`;
+        let comando = `INSERT into usuario(nome, username, email, senha_hash,cpf, bio, imagem_perfil, dataCriacao, dataAtualiza)
+values(?, ?, ?, MD5(?), ? ,? , ? ,now(), now())`;
 
         //Query para inserir no banco (não esquecer o "await");
 
@@ -16,6 +16,7 @@ values(?, ?, ?, MD5(?),? , ? ,now(), now())`;
             usuario.username,
             usuario.email,
             usuario.senha,
+            usuario.cpf,
             usuario.bio || null,
             usuario.imagem_perfil || null]);
 

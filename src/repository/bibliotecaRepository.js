@@ -31,7 +31,8 @@ export async function salvarLivrosNaBiblioteca(usuario_id, livro_id) {
 
 export async function listarBibliotecaUsuario(usuarioId) {
     const [resp] = await connection.query(
-        `SELECT l.id, l.titulo, l.autores, l.descricao, l.capa_url
+        `SELECT l.id, l.titulo, l.autores, l.descricao,
+         l.capa_url, b.status
          FROM biblioteca_usuario b
          INNER JOIN livro l ON b.id_livro = l.id
          WHERE b.id_usuario = ?`,
@@ -57,3 +58,96 @@ export async function verificarLivroNaBiblioteca(usuarioId, livroId) {
     );
     return resp;
 }
+
+export async function listarPorQueroLer(usuario_id) {
+    let comando = `
+        SELECT 
+            bu.id,
+            bu.status,
+            bu.avaliacao,
+            bu.comentario,
+            bu.dataInicio,
+            bu.dataFim,
+            l.id AS livroId,
+            l.titulo,
+            l.autores,
+            l.capa_url,
+            l.descricao
+        FROM biblioteca_usuario bu
+        INNER JOIN livro l ON l.id = bu.id_livro
+        WHERE bu.status = 'quero ler'
+          AND bu.id_usuario = ?
+        ORDER BY bu.id DESC
+    `;
+
+    let [resultado] = await connection.query(comando, [usuario_id]);
+
+    return resultado;
+}
+
+export async function listarPorEstouLendo(usuario_id) {
+
+    let comando = `SELECT 
+            bu.id,
+            bu.status,
+            bu.avaliacao,
+            bu.comentario,
+            bu.dataInicio,
+            bu.dataFim,
+            l.id AS livroId,
+            l.titulo,
+            l.autores,
+            l.capa_url,
+            l.descricao
+        FROM biblioteca_usuario bu
+        INNER JOIN livro l ON l.id = bu.id_livro
+        WHERE bu.status = 'estou lendo'
+          AND bu.id_usuario = ?
+        ORDER BY bu.id DESC
+    `;
+
+    let [resultado] = await connection.query(comando, [usuario_id]);
+
+    return resultado;
+    
+}
+
+export async function listarPorLivrosLidos(usuario_id) {
+
+    let comando = `SELECT 
+            bu.id,
+            bu.status,
+            bu.avaliacao,
+            bu.comentario,
+            bu.dataInicio,
+            bu.dataFim,
+            l.id AS livroId,
+            l.titulo,
+            l.autores,
+            l.capa_url,
+            l.descricao
+        FROM biblioteca_usuario bu
+        INNER JOIN livro l ON l.id = bu.id_livro
+        WHERE bu.status = 'concluido'
+          AND bu.id_usuario = ?
+        ORDER BY bu.id DESC
+    `;
+
+    let [resultado] = await connection.query(comando, [usuario_id]);
+
+    return resultado;
+    
+}
+
+export async function atualizarStatus(usuario_id, livro_id, novoStatus) {
+    const comando = `
+        UPDATE biblioteca_usuario
+        SET status = ?
+        WHERE id_usuario = ? AND id_livro = ?
+    `;
+
+    let [resultado] = await connection.query(comando, [novoStatus, usuario_id, livro_id]);
+
+    return resultado;
+}
+

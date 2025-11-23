@@ -7,13 +7,16 @@ import {
     salvarLivrosNaBiblioteca, 
     listarBibliotecaUsuario,
     removerLivroDaBiblioteca,
-    verificarLivroNaBiblioteca
+    verificarLivroNaBiblioteca,
+    listarPorQueroLer,
+    atualizarStatus
 } from "../repository/bibliotecaRepository.js";
 
 let endPoints = Router();
 
 
-// 🟩 Adicionar livro à biblioteca
+// Adicionar livro à biblioteca
+
 endPoints.post('/usuario/biblioteca/post/:titulo', autenticar, async (req, resp) => {
     try {
         const tituloLivro = req.params.titulo.trim();
@@ -56,7 +59,7 @@ endPoints.post('/usuario/biblioteca/post/:titulo', autenticar, async (req, resp)
 });
 
 
-// 🟦 Listar biblioteca do usuário
+//  Listar biblioteca do usuário
 endPoints.get('/usuario/biblioteca', autenticar, async (req, resp) => {
     try {
         const usuarioId = req.usuario.id;
@@ -74,7 +77,7 @@ endPoints.get('/usuario/biblioteca', autenticar, async (req, resp) => {
 });
 
 
-// 🟥 Remover livro da biblioteca
+// Remover livro da biblioteca
 endPoints.delete('/usuario/biblioteca/delete/:idLivro', autenticar, async (req, resp) => {
     try {
         const usuarioId = req.usuario.id;
@@ -100,5 +103,81 @@ endPoints.delete('/usuario/biblioteca/delete/:idLivro', autenticar, async (req, 
         });
     }
 });
+
+//select com base nos status
+
+endPoints.get('/usuario/biblioteca/quero-ler', autenticar, async (req, resp) => {
+    try {
+        const usuarioId = req.usuario.id;
+
+        // Chama o repository
+        const livros = await listarPorQueroLer(usuarioId);
+
+        console.log(livros)
+
+        if (!livros || livros.length === 0) {
+            return resp.status(200).send({
+                mensagem: "Nenhum livro marcado como 'quero ler'.",
+                livros: []
+            });
+        }
+
+        return resp.status(200).send({
+            quantidade: livros.length,
+            livros: livros
+        });
+
+    } catch (err) {
+        console.error("Erro no GET /usuario/biblioteca/quero-ler:", err);
+
+        return resp.status(500).send({
+            erro: "Erro interno ao buscar os livros da biblioteca."
+        });
+    }
+});
+
+// Atualizar status do livro na biblioteca
+endPoints.put('/usuario/biblioteca/status/:idLivro', autenticar, async (req, resp) => {
+    try {
+        const usuarioId = req.usuario.id;
+        const idLivro = req.params.idLivro;
+        const { status } = req.body;
+
+        const statusValidos = ['quero ler', 'estou lendo', 'concluido'];
+
+        if (!status || !statusValidos.includes(status)) {
+            return resp.status(400).send({
+                erro: "Status inválido. Use: 'quero ler', 'estou lendo' ou 'concluido'."
+            });
+        }
+
+        // Verifica se o livro está na biblioteca
+        const existe = await verificarLivroNaBiblioteca(usuarioId, idLivro);
+
+        if (existe.length === 0) {
+            return resp.status(404).send({
+                erro: "Esse livro não está na biblioteca do usuário."
+            });
+        }
+
+        // Atualiza o status
+        const atualizado = await atualizarStatus(usuarioId, idLivro, status);
+
+        return resp.send({
+            mensagem: "Status atualizado com sucesso.",
+            status: status,
+            resultado: atualizado
+        });
+
+    } catch (err) {
+        console.error("Erro no PUT /usuario/biblioteca/status:", err);
+
+        return resp.status(500).send({
+            erro: "Erro interno ao atualizar status."
+        });
+    }
+});
+
+
 
 export default endPoints;

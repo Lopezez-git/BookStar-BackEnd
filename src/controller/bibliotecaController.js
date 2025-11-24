@@ -136,6 +136,64 @@ endPoints.get('/usuario/biblioteca/quero-ler', autenticar, async (req, resp) => 
     }
 });
 
+// Listar livros com status "estou lendo"
+endPoints.get('/usuario/biblioteca/estou-lendo', autenticar, async (req, resp) => {
+    try {
+        const usuarioId = req.usuario.id;
+
+        const livros = await listarPorEstouLendo(usuarioId);
+
+        if (!livros || livros.length === 0) {
+            return resp.status(200).send({
+                mensagem: "Nenhum livro marcado como 'estou lendo'.",
+                livros: []
+            });
+        }
+
+        return resp.status(200).send({
+            quantidade: livros.length,
+            livros: livros
+        });
+
+    } catch (err) {
+        console.error("Erro no GET /usuario/biblioteca/estou-lendo:", err);
+
+        return resp.status(500).send({
+            erro: "Erro interno ao buscar os livros."
+        });
+    }
+});
+
+
+// Listar livros com status "concluido"
+endPoints.get('/usuario/biblioteca/concluido', autenticar, async (req, resp) => {
+    try {
+        const usuarioId = req.usuario.id;
+
+        const livros = await listarPorLivrosLidos(usuarioId);
+
+        if (!livros || livros.length === 0) {
+            return resp.status(200).send({
+                mensagem: "Nenhum livro marcado como 'concluído'.",
+                livros: []
+            });
+        }
+
+        return resp.status(200).send({
+            quantidade: livros.length,
+            livros: livros
+        });
+
+    } catch (err) {
+        console.error("Erro no GET /usuario/biblioteca/concluido:", err);
+
+        return resp.status(500).send({
+            erro: "Erro interno ao buscar os livros concluídos."
+        });
+    }
+});
+
+
 // Atualizar status do livro na biblioteca
 endPoints.put('/usuario/biblioteca/status/:idLivro', autenticar, async (req, resp) => {
     try {

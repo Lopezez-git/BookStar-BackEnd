@@ -63,6 +63,7 @@ export default async function getPerfil(id_usuario) {
         let comando = `SELECT 
     u.id,
     u.nome,
+    u.username,
     u.imagem_perfil,
 
     

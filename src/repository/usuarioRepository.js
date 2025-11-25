@@ -63,6 +63,7 @@ export default async function getPerfil(id_usuario) {
         let comando = `SELECT 
     u.id,
     u.nome,
+    u.username,
     u.imagem_perfil,
 
     
@@ -105,4 +106,14 @@ export async function atualizarFotoDePerfil(imagem, id_usuario) {
     let [select] = await connection.query(comando, [id_usuario]);
 
     return select;
+}
+
+export async function showAllUsuarios(usuarioId) {
+
+    let comando = `select id, nome, username, imagem_perfil from usuario where id != ?`;
+
+    let [select] = await connection.query(comando, [usuarioId]);
+
+    return select;
+    
 }

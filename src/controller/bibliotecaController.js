@@ -9,7 +9,9 @@ import {
     removerLivroDaBiblioteca,
     verificarLivroNaBiblioteca,
     listarPorQueroLer,
-    atualizarStatus
+    atualizarStatus,
+    listarPorLivrosLidos,
+    listarPorEstouLendo
 } from "../repository/bibliotecaRepository.js";
 
 let endPoints = Router();

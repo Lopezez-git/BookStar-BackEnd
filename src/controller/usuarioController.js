@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import getPerfil, { atualizarFotoDePerfil, inserirUsuario, verificarUsuario } from "../repository/usuarioRepository.js";
+import getPerfil, { atualizarFotoDePerfil, inserirUsuario, verificarUsuario, showAllUsuarios } from "../repository/usuarioRepository.js";
 
 import { gerarToken } from "../services/jwt.js";
 
@@ -122,6 +122,26 @@ endPoints.put('/usuario/perfil/capa', autenticar, uploadPErfil.single('imagem'),
     }
 
     resp.send(saida[0]);
+
+});
+
+endPoints.get('/usuario/all', autenticar, async (req, resp) => {
+
+    try {
+        let usuarioLogado = req.usuario.id;
+
+        let usuarios = await showAllUsuarios(usuarioLogado);
+
+        if (!usuarios || usuarios.length === 0) {
+            return resp.status(404).send({ erro: "Nenhum usuário encontrado." });
+        }
+
+        resp.send(usuarios);
+
+    } catch (err) {
+        console.error("Erro no endpoint /usuario/all", err);
+        resp.status(500).send({ erro: "Erro ao listar usuários." });
+    }
 
 });
 

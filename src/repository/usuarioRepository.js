@@ -96,7 +96,7 @@ WHERE u.id = ?;`;
 //Atualizar a foto de perfil e add no banco de dados
 
 export async function atualizarFotoDePerfil(imagem, id_usuario) {
-    
+
     let comando = `UPDATE usuario SET imagem_perfil = ? WHERE id = ?`;
 
     let [update] = await connection.query(comando, [imagem, id_usuario]);
@@ -110,10 +110,13 @@ export async function atualizarFotoDePerfil(imagem, id_usuario) {
 
 export async function showAllUsuarios(usuarioId) {
 
+    console.log('📌 showAllUsuarios chamada com ID:', usuarioId);
+    console.log('📌 Tipo do ID:', typeof usuarioId);
+
     let comando = `select id, nome, username, imagem_perfil from usuario where id != ?`;
 
     let [select] = await connection.query(comando, [usuarioId]);
 
     return select;
-    
+
 }

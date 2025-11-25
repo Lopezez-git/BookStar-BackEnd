@@ -5,29 +5,30 @@ import buscarSeguidores, { seguirUsuario, deixarDeSeguirUsuario } from "../repos
 let endPoints = Router();
 
 endPoints.post('/usuario/seguir', autenticar, async (req, resp) => {
-  try {
-    const seguidor = req.usuario.id;
-    const seguido = req.body.username;
+  console.log('REQ.BODY RECEBIDO:', req.body);
+  console.log('TIPO:', typeof req.body.id_seguido, req.body.id_seguido);
 
-    if (!seguido) {
-      return resp.status(400).send({ sucesso: false, mensagem: 'Usuário a ser seguido não informado.' });
-    }
+  const idSeguidor = req.usuario.id;
+  const idSeguido = Number(req.body.id_seguido);
 
-    const saida = await seguirUsuario(seguidor, seguido);
-
-    if (!saida.sucesso) {
-      return resp.status(400).send(saida);
-    }
-
-    return resp.status(200).send(saida);
-  } catch (error) {
-    console.error('Erro ao seguir usuário:', error);
-    return resp.status(500).send({
+  if (!idSeguido) {
+    return resp.status(400).send({
       sucesso: false,
-      mensagem: 'Erro interno ao tentar seguir o usuário.'
+      mensagem: 'ID do usuário a ser seguido não informado ou inválido.'
     });
   }
+
+  const saida = await seguirUsuario(idSeguidor, idSeguido);
+
+  if (!saida.sucesso) {
+    return resp.status(400).send(saida);
+  }
+
+  return resp.status(200).send(saida);
 });
+
+
+
 
 endPoints.post('/usuario/deixar-de-seguir', autenticar, async (req, resp) => {
   try {

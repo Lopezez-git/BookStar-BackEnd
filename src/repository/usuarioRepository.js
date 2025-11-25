@@ -106,3 +106,13 @@ export async function atualizarFotoDePerfil(imagem, id_usuario) {
 
     return select;
 }
+
+export async function showAllUsuarios(usuarioId) {
+
+    let comando = `select id, nome, username, imagem_perfil from usuario where id != ?`;
+
+    let [select] = await connection.query(comando, [usuarioId]);
+
+    return select;
+    
+}

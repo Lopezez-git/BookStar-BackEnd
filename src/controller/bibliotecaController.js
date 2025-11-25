@@ -21,6 +21,8 @@ endPoints.post('/usuario/biblioteca/post/:titulo', autenticar, async (req, resp)
     try {
         const tituloLivro = req.params.titulo.trim();
         const usuarioId = req.usuario.id;
+        const comentario = req.body.comentario;
+        const avaliacao = req.body.avaliacao;
 
         if (!tituloLivro) {
             return resp.status(400).send({ erro: 'Título do livro não foi informado.' });
@@ -41,7 +43,7 @@ endPoints.post('/usuario/biblioteca/post/:titulo', autenticar, async (req, resp)
             return resp.status(409).send({ erro: 'Livro já está na biblioteca do usuário.' });
         }
 
-        const inserido = await salvarLivrosNaBiblioteca(usuarioId, livroId);
+        const inserido = await salvarLivrosNaBiblioteca(usuarioId, livroId, comentario, avaliacao);
 
         return resp.status(201).send({
             mensagem: 'Livro adicionado à biblioteca com sucesso!',

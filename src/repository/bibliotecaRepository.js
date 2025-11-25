@@ -1,6 +1,6 @@
 import connection from './connection.js';
 
-export async function salvarLivrosNaBiblioteca(usuario_id, livro_id) {
+export async function salvarLivrosNaBiblioteca(usuario_id, livro_id, comentario, avaliacao) {
 
     let comando = `
         INSERT INTO biblioteca_usuario
@@ -12,8 +12,8 @@ export async function salvarLivrosNaBiblioteca(usuario_id, livro_id) {
     let valores = [
         usuario_id,
         livro_id,
-        null,   // avaliacao
-        null,   // comentario
+        avaliacao,   // avaliacao
+        comentario,   // comentario
         null,   // dataInicio
         null    // dataFim
     ];
@@ -44,7 +44,7 @@ export async function listarBibliotecaUsuario(usuarioId) {
 // Remover livro
 export async function removerLivroDaBiblioteca(usuarioId, livroId) {
     const [resp] = await connection.query(
-        "DELETE FROM biblioteca WHERE id_usuario = ? AND id_livro = ?",
+        "DELETE FROM biblioteca_usuario WHERE id_usuario = ? AND id_livro = ?",
         [usuarioId, livroId]
     );
     return resp;

@@ -1,8 +1,8 @@
 import { Router } from "express";
 
-import getPerfil, { atualizarFotoDePerfil, inserirUsuario, verificarUsuario} from "../repository/usuarioRepository.js";
+import getPerfil, { atualizarFotoDePerfil, inserirUsuario, verificarUsuario } from "../repository/usuarioRepository.js";
 
-import {gerarToken} from "../services/jwt.js";
+import { gerarToken } from "../services/jwt.js";
 
 import autenticar from "../middlewares/autenticar.js";
 
@@ -12,7 +12,7 @@ import path from "path";
 
 let endPoints = Router();
 
-let uploadPErfil = multer({dest: path.resolve('storage', 'perfil')});
+let uploadPErfil = multer({ dest: path.resolve('storage', 'perfil') });
 
 //EndPoint de cadastro
 
@@ -28,7 +28,7 @@ endPoints.post('/usuario/cadastro', async (req, resp) => {
             resp.status(400).send("Erro ao inserir");
         }
         else {
-            resp.send({mensagem: "Id do novo usuario: " + saidaDb});
+            resp.send({ mensagem: "Id do novo usuario: " + saidaDb });
         }
     }
     catch (err) {
@@ -43,7 +43,7 @@ endPoints.post('/usuario/cadastro', async (req, resp) => {
 endPoints.post('/usuario/login', async (req, resp) => {
     //Em dev
     try {
-        const {email, senha} = req.body;
+        const { email, senha } = req.body;
 
         if (!email || !senha) {
 
@@ -52,18 +52,19 @@ endPoints.post('/usuario/login', async (req, resp) => {
 
         let usuario = await verificarUsuario(email, senha);
 
-        if(!usuario){
-            resp.status(400).send({erro: 'Email ou senha incorretos'});
+        if (!usuario) {
+            resp.status(400).send({ erro: 'Email ou senha incorretos' });
         }
 
         let token = gerarToken(usuario);
 
-        if(!token){
+        if (!token) {
 
-            resp.status(400).send({erro: 'O token não foi gerado'})
+            resp.status(400).send({ erro: 'O token não foi gerado' })
         }
 
-        resp.send({mensagem: 'Login realizado com sucesso',
+        resp.send({
+            mensagem: 'Login realizado com sucesso',
             token,
             usuario: {
                 id: usuario.id,
@@ -72,15 +73,14 @@ endPoints.post('/usuario/login', async (req, resp) => {
             }
         });
 
-
     } catch (err) {
 
     }
 });
 
-endPoints.get('/usuario/perfil', autenticar, async(req, resp) => {
+endPoints.get('/usuario/perfil', autenticar, async (req, resp) => {
 
-    try{
+    try {
 
         let usuario = req.usuario;
 
@@ -88,14 +88,14 @@ endPoints.get('/usuario/perfil', autenticar, async(req, resp) => {
 
         let select = await getPerfil(usuario.id);
 
-        if(select.length === 0){
+        if (select.length === 0) {
 
-            return resp.status(400).send({Erro: "Erro ao retornar usuario"});
+            return resp.status(400).send({ Erro: "Erro ao retornar usuario" });
         }
 
         resp.send(select[0])
     }
-    catch(err){
+    catch (err) {
 
         console.log("Erro no controller", err);
 
@@ -106,7 +106,7 @@ endPoints.get('/usuario/perfil', autenticar, async(req, resp) => {
 
 //Adicionando uma foto de perfil
 
-endPoints.put('/usuario/perfil/capa', autenticar, uploadPErfil.single('imagem'), async(req, resp) =>{
+endPoints.put('/usuario/perfil/capa', autenticar, uploadPErfil.single('imagem'), async (req, resp) => {
 
     let imagem = req.file.filename;
 
@@ -116,15 +116,13 @@ endPoints.put('/usuario/perfil/capa', autenticar, uploadPErfil.single('imagem'),
 
     let saida = await atualizarFotoDePerfil(imagem, req.usuario.id);
 
-    if(saida.length === 0){
+    if (saida.length === 0) {
 
-       return resp.status(400).send({Erro: "Erro ao atualizar a foto de perfil"});
+        return resp.status(400).send({ Erro: "Erro ao atualizar a foto de perfil" });
     }
 
     resp.send(saida[0]);
 
 });
-
-
 
 export default endPoints;

@@ -89,3 +89,21 @@ WHERE
   return select;
 }
 
+export async function buscarSeguindo(idSeguidor) {
+  const comando = `
+    SELECT 
+      u.id,
+      u.nome,
+      u.username,
+      u.imagem_perfil
+    FROM seguidores s
+    INNER JOIN usuario u ON s.id_seguido = u.id
+    WHERE s.id_seguidor = ?;
+  `;
+
+  const [select] = await connection.query(comando, [idSeguidor]);
+  return select;
+}
+
+
+

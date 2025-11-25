@@ -1,6 +1,6 @@
 import { Router } from "express";
 import autenticar from "../middlewares/autenticar.js";
-import buscarSeguidores, { seguirUsuario, deixarDeSeguirUsuario } from "../repository/seguidorRepository.js";
+import buscarSeguidores, { seguirUsuario, deixarDeSeguirUsuario, buscarSeguindo } from "../repository/seguidorRepository.js";
 
 let endPoints = Router();
 
@@ -69,6 +69,22 @@ endPoints.get('/usuario/show-seguidores', autenticar, async (req, resp) => {
   resp.send(select);
 
 })
+
+endPoints.get('/usuario/seguindo', autenticar, async (req, resp) => {
+  try {
+    const idLogado = req.usuario.id;
+
+    const lista = await buscarSeguindo(idLogado);
+
+    return resp.status(200).send({ seguindo: lista });
+
+  } catch (error) {
+    console.error("Erro ao buscar seguindo:", error);
+    return resp.status(500).send({ erro: "Erro ao buscar lista de seguindo." });
+  }
+});
+
+
 
 
 

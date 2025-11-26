@@ -1,17 +1,18 @@
 import connection from './connection.js';
 
-export async function salvarLivrosNaBiblioteca(usuario_id, livro_id, comentario, avaliacao) {
+export async function salvarLivrosNaBiblioteca(usuario_id, livro_id, comentario, avaliacao, status) {
 
     let comando = `
         INSERT INTO biblioteca_usuario
             (id_usuario, id_livro, status, avaliacao, comentario, dataInicio, dataFim)
-        VALUES (?, ?, 'quero ler', ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     // Aqui precisam ser 5 valores depois dos IDs
     let valores = [
         usuario_id,
         livro_id,
+        status,
         avaliacao,   // avaliacao
         comentario,   // comentario
         null,   // dataInicio

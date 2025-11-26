@@ -1,10 +1,10 @@
 import { Router } from "express";
 import autenticar from "../middlewares/autenticar.js";
-import { 
+import {
     buscarLivroPorTitulo
 } from "../repository/livroRepository.js";
-import { 
-    salvarLivrosNaBiblioteca, 
+import {
+    salvarLivrosNaBiblioteca,
     listarBibliotecaUsuario,
     removerLivroDaBiblioteca,
     verificarLivroNaBiblioteca,
@@ -26,6 +26,7 @@ endPoints.post('/usuario/biblioteca/post/:titulo', autenticar, async (req, resp)
         const usuarioId = req.usuario.id;
         const comentario = req.body.comentario;
         const avaliacao = req.body.avaliacao;
+        const status = req.body.status;
 
         if (!tituloLivro) {
             return resp.status(400).send({ erro: 'Título do livro não foi informado.' });
@@ -46,7 +47,7 @@ endPoints.post('/usuario/biblioteca/post/:titulo', autenticar, async (req, resp)
             return resp.status(409).send({ erro: 'Livro já está na biblioteca do usuário.' });
         }
 
-        const inserido = await salvarLivrosNaBiblioteca(usuarioId, livroId, comentario, avaliacao);
+        const inserido = await salvarLivrosNaBiblioteca(usuarioId, livroId, comentario, avaliacao, status);
 
         return resp.status(201).send({
             mensagem: 'Livro adicionado à biblioteca com sucesso!',

@@ -3,9 +3,9 @@ import connection from './connection.js';
 export async function salvarLivrosNaBiblioteca(usuario_id, livro_id, comentario, avaliacao, status) {
 
     let comando = `
-        INSERT INTO biblioteca_usuario
-            (id_usuario, id_livro, status, avaliacao, comentario, dataInicio, dataFim)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO biblioteca
+            (id_usuario, id_livro, status, avaliacao, comentario)
+        VALUES (?, ?, ?, ?, ?)
     `;
 
     // Aqui precisam ser 5 valores depois dos IDs
@@ -14,16 +14,14 @@ export async function salvarLivrosNaBiblioteca(usuario_id, livro_id, comentario,
         livro_id,
         status,
         avaliacao,   // avaliacao
-        comentario,   // comentario
-        null,   // dataInicio
-        null    // dataFim
+        comentario   // dataFim
     ];
 
     let [inserir] = await connection.query(comando, valores);
 
     // Buscar registro recém inserido
     let [select] = await connection.query(
-        `SELECT * FROM biblioteca_usuario WHERE id = ?`,
+        `SELECT * FROM biblioteca WHERE id = ?`,
         [inserir.insertId]
     );
 
@@ -34,7 +32,7 @@ export async function listarBibliotecaUsuario(usuarioId) {
     const [resp] = await connection.query(
         `SELECT l.id, l.titulo, l.autores, l.descricao,
          l.capa_url, b.status
-         FROM biblioteca_usuario b
+         FROM biblioteca b
          INNER JOIN livro l ON b.id_livro = l.id
          WHERE b.id_usuario = ?`,
         [usuarioId]
@@ -45,7 +43,7 @@ export async function listarBibliotecaUsuario(usuarioId) {
 // Remover livro
 export async function removerLivroDaBiblioteca(usuarioId, livroId) {
     const [resp] = await connection.query(
-        "DELETE FROM biblioteca_usuario WHERE id_usuario = ? AND id_livro = ?",
+        "DELETE FROM biblioteca WHERE id_usuario = ? AND id_livro = ?",
         [usuarioId, livroId]
     );
     return resp;
@@ -54,7 +52,7 @@ export async function removerLivroDaBiblioteca(usuarioId, livroId) {
 // Verificar duplicação
 export async function verificarLivroNaBiblioteca(usuarioId, livroId) {
     const [resp] = await connection.query(
-        "SELECT * FROM biblioteca_usuario WHERE id_usuario = ? AND id_livro = ?",
+        "SELECT * FROM biblioteca WHERE id_usuario = ? AND id_livro = ?",
         [usuarioId, livroId]
     );
     return resp;
@@ -67,14 +65,12 @@ export async function listarPorQueroLer(usuario_id) {
             bu.status,
             bu.avaliacao,
             bu.comentario,
-            bu.dataInicio,
-            bu.dataFim,
             l.id AS livroId,
             l.titulo,
             l.autores,
             l.capa_url,
             l.descricao
-        FROM biblioteca_usuario bu
+        FROM biblioteca bu
         INNER JOIN livro l ON l.id = bu.id_livro
         WHERE bu.status = 'quero ler'
           AND bu.id_usuario = ?
@@ -93,14 +89,12 @@ export async function listarPorEstouLendo(usuario_id) {
             bu.status,
             bu.avaliacao,
             bu.comentario,
-            bu.dataInicio,
-            bu.dataFim,
             l.id AS livroId,
             l.titulo,
             l.autores,
             l.capa_url,
             l.descricao
-        FROM biblioteca_usuario bu
+        FROM biblioteca bu
         INNER JOIN livro l ON l.id = bu.id_livro
         WHERE bu.status = 'estou lendo'
           AND bu.id_usuario = ?
@@ -120,14 +114,12 @@ export async function listarPorLivrosLidos(usuario_id) {
             bu.status,
             bu.avaliacao,
             bu.comentario,
-            bu.dataInicio,
-            bu.dataFim,
             l.id AS livroId,
             l.titulo,
             l.autores,
             l.capa_url,
             l.descricao
-        FROM biblioteca_usuario bu
+        FROM biblioteca bu
         INNER JOIN livro l ON l.id = bu.id_livro
         WHERE bu.status = 'concluido'
           AND bu.id_usuario = ?
@@ -142,7 +134,7 @@ export async function listarPorLivrosLidos(usuario_id) {
 
 export async function atualizarStatus(usuario_id, livro_id, novoStatus) {
     const comando = `
-        UPDATE biblioteca_usuario
+        UPDATE biblioteca
         SET status = ?
         WHERE id_usuario = ? AND id_livro = ?
     `;
@@ -155,13 +147,11 @@ export async function atualizarStatus(usuario_id, livro_id, novoStatus) {
 export async function atualizarLivroBiblioteca(idUsuario, idLivro, dados) {
 
     const comando = `
-        UPDATE biblioteca_usuario
+        UPDATE biblioteca
         SET 
             status = ?,
             avaliacao = ?,
-            comentario = ?,
-            dataInicio = ?,
-            dataFim = ?
+            comentario = ?
         WHERE id_usuario = ? AND id_livro = ?
     `;
 
@@ -169,8 +159,6 @@ export async function atualizarLivroBiblioteca(idUsuario, idLivro, dados) {
         dados.status,
         dados.avaliacao,
         dados.comentario,
-        dados.dataInicio || null,
-        dados.dataFim || null,
         idUsuario,
         idLivro
     ];

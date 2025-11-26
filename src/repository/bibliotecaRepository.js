@@ -151,3 +151,31 @@ export async function atualizarStatus(usuario_id, livro_id, novoStatus) {
     return resultado;
 }
 
+export async function atualizarLivroBiblioteca(idUsuario, idLivro, dados) {
+
+    const comando = `
+        UPDATE biblioteca_usuario
+        SET 
+            status = ?,
+            avaliacao = ?,
+            comentario = ?,
+            dataInicio = ?,
+            dataFim = ?
+        WHERE id_usuario = ? AND id_livro = ?
+    `;
+
+    let params = [
+        dados.status,
+        dados.avaliacao,
+        dados.comentario,
+        dados.dataInicio || null,
+        dados.dataFim || null,
+        idUsuario,
+        idLivro
+    ];
+
+    let [result] = await connection.query(comando, params);
+
+    return result.affectedRows > 0;
+}
+

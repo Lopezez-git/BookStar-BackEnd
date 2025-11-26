@@ -11,7 +11,8 @@ import {
     listarPorQueroLer,
     atualizarStatus,
     listarPorLivrosLidos,
-    listarPorEstouLendo
+    listarPorEstouLendo,
+    atualizarLivroBiblioteca
 } from "../repository/bibliotecaRepository.js";
 
 let endPoints = Router();
@@ -239,6 +240,44 @@ endPoints.put('/usuario/biblioteca/status/:idLivro', autenticar, async (req, res
         });
     }
 });
+
+// PUT — atualizar status, avaliação e comentário
+endPoints.put('/usuario/biblioteca/atualizar/:titulo', autenticar, async (req, resp) => {
+    try {
+        const idUsuario = req.usuario.id;
+        const tituloLivro = req.params.titulo.trim();
+        const dados = req.body;
+
+        // Busca o livro pelo título
+        const livro = await buscarLivroPorTitulo(tituloLivro);
+
+        if (!livro || livro.length === 0) {
+            return resp.status(404).send({ erro: 'Livro não encontrado.' });
+        }
+
+        const idLivro = livro[0].id;
+
+        // Verifica se o livro está na biblioteca do usuário
+        const existe = await verificarLivroNaBiblioteca(idUsuario, idLivro);
+
+        if (existe.length === 0) {
+            return resp.status(404).send({ erro: "Esse livro não está na sua biblioteca." });
+        }
+
+        // Atualiza
+        const atualizado = await atualizarLivroBiblioteca(idUsuario, idLivro, dados);
+
+        return resp.send({
+            mensagem: "Livro atualizado com sucesso!",
+            atualizado
+        });
+
+    } catch (err) {
+        console.error("Erro ao atualizar livro:", err);
+        return resp.status(500).send({ erro: "Erro ao atualizar livro na biblioteca." });
+    }
+});
+
 
 
 

@@ -1,33 +1,36 @@
 import connection from "./connection.js";
 
 export async function inserirUsuario(usuario) {
+  try {
+    const comando = `
+      INSERT INTO usuario (
+        nome, username, email, senha_hash,
+        cpf, bio, imagem_perfil,
+        dataCriacao, dataAtualiza
+      )
+      VALUES (?, ?, ?, MD5(?), ?, ?, ?, NOW(), NOW())
+    `;
 
-    // função para inserir usuario
+    const params = [
+      usuario.nome,
+      usuario.username,
+      usuario.email,
+      usuario.senha,
+      usuario.cpf,
+      usuario.bio || null,
+      usuario.imagem_perfil || null
+    ];
 
-    try {
+    const [info] = await connection.query(comando, params);
+    return info.insertId;
 
-        let comando = `INSERT into usuario(nome, username, email, senha_hash,cpf, bio, imagem_perfil, dataCriacao, dataAtualiza)
-values(?, ?, ?, MD5(?), ? ,? , ? ,now(), now())`;
-
-        //Query para inserir no banco (não esquecer o "await");
-
-        let [info] = await connection.query(comando, [
-            usuario.nome,
-            usuario.username,
-            usuario.email,
-            usuario.senha,
-            usuario.cpf,
-            usuario.bio || null,
-            usuario.imagem_perfil || null]);
-
-        return info.insertId;
-    }
-    catch (err) {
-
-        console.error("Erro ao salvar usuário:", err);
-        throw new Error("Erro ao cadastrar usuário");
-    }
+  } catch (err) {
+    console.error("Erro SQL:", err.sqlMessage);
+    console.error("Código SQL:", err.code);
+    throw err;
+  }
 }
+
 
 export async function buscarUsuarioPorEmail(email) {
 
@@ -110,8 +113,8 @@ export async function atualizarFotoDePerfil(imagem, id_usuario) {
 
 export async function showAllUsuarios(usuarioId) {
 
-    console.log('📌 showAllUsuarios chamada com ID:', usuarioId);
-    console.log('📌 Tipo do ID:', typeof usuarioId);
+    console.log(' showAllUsuarios chamada com ID:', usuarioId);
+    console.log(' Tipo do ID:', typeof usuarioId);
 
     let comando = `select id, nome, username, imagem_perfil from usuario where id != ?`;
 

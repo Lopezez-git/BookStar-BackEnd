@@ -23,6 +23,7 @@ CREATE TABLE usuario (
   nome VARCHAR(255) NOT NULL,
   username VARCHAR(100) NOT NULL UNIQUE,
   email VARCHAR(255) NOT NULL UNIQUE,
+  cpf VARCHAR(11) not NULL,
   senha_hash VARCHAR(255) NOT NULL,
   imagem_perfil VARCHAR(255) DEFAULT NULL,
   data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -79,12 +80,6 @@ CREATE TABLE seguidores (
 -- 
 -- As senhas abaixo são hashes de exemplo. Substitua por hashes reais!
 
-INSERT INTO usuario (nome, username, email, senha_hash) VALUES
-('Allan Lopes', 'allanlopes', 'allan@email.com', '$2b$10$YourHashHere1234567890123456789012345678901234567890'),
-('Lethicia Nobre', 'lethicianobre', 'lethicia@email.com', '$2b$10$YourHashHere1234567890123456789012345678901234567890'),
-('Ana Carolina', 'anacarolina', 'ana@email.com', '$2b$10$YourHashHere1234567890123456789012345678901234567890'),
-('Thalyta Cristina', 'thalytacristina', 'thalyta@email.com', '$2b$10$YourHashHere1234567890123456789012345678901234567890');
-
 -- ============================================
 -- INSERIR LIVROS
 -- ============================================
@@ -129,39 +124,7 @@ INSERT INTO livro (titulo, descricao, autores, capa_url) VALUES
 ('Filho Perfeito', 'Em um futuro próximo, uma empresa chamada Morte-Casting liga para pessoas nas primeiras horas da manhã para avisá-las que morrerão naquele dia.', 'Adam Silvera', '/storage/capa/b5273b1caec3d2eb4b2aa96a3167d04a'),
 ('Quem É Você, Alasca?', 'Em um futuro próximo, uma empresa chamada Morte-Casting liga para pessoas nas primeiras horas da manhã para avisá-las que morrerão naquele dia.', 'Adam Silvera', '/storage/capa/d7547cfe56ffcfeb89236fe0c0859b00');
 
--- ============================================
--- DADOS DE EXEMPLO: Seguidores
--- ============================================
-INSERT INTO seguidores (id_seguidor, id_seguido) VALUES
-(1, 2), (1, 3), (1, 4),
-(2, 1), (2, 3),
-(3, 1), (3, 2), (3, 4),
-(4, 1);
 
--- ============================================
--- DADOS DE EXEMPLO: Biblioteca
--- ============================================
-INSERT INTO biblioteca (id_usuario, id_livro, avaliacao, comentario, status) VALUES
--- Allan tem alguns livros lidos
-(1, 19, 1, 'Assustador demais! Não consegui dormir depois de ler.', 'concluido'),
-(1, 7, 3, 'Clássico do suspense. Clarice é uma personagem incrível.', 'concluido'),
-(1, 20, 5, 'Melhor thriller psicológico que já li!', 'concluido'),
-(1, 1, 0, NULL, 'quero ler'),
-(1, 4, 0, NULL, 'estou lendo'),
-
--- Lethicia tem alguns livros
-(2, 1, 5, 'Mudou minha perspectiva sobre a vida. Lindo!', 'concluido'),
-(2, 8, 4, 'Reflexões profundas sobre a vida e a imperfeição.', 'concluido'),
-(2, 2, 0, NULL, 'estou lendo'),
-
--- Ana tem vários livros
-(3, 4, 5, 'Melhor mistério YA que já li!', 'concluido'),
-(3, 10, 5, 'Obra-prima distópica. Atualíssimo!', 'concluido'),
-(3, 5, 0, NULL, 'estou lendo');
-
--- ============================================
--- ÍNDICES PARA PERFORMANCE
--- ============================================
 CREATE INDEX idx_biblioteca_usuario ON biblioteca(id_usuario);
 CREATE INDEX idx_biblioteca_livro ON biblioteca(id_livro);
 CREATE INDEX idx_biblioteca_status ON biblioteca(status);
@@ -185,3 +148,5 @@ SELECT 'Livros na biblioteca:' AS info, COUNT(*) AS total FROM biblioteca;
 -- 2. Execute: npm install
 -- 3. Execute: npm start
 -- 4. Acesse: http://localhost:5010
+
+SELECT * FROM usuario;

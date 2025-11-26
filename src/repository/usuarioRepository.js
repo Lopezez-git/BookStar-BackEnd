@@ -5,10 +5,9 @@ export async function inserirUsuario(usuario) {
     const comando = `
       INSERT INTO usuario (
         nome, username, email, senha_hash,
-        cpf, bio, imagem_perfil,
-        dataCriacao, dataAtualiza
+        cpf, imagem_perfil
       )
-      VALUES (?, ?, ?, MD5(?), ?, ?, ?, NOW(), NOW())
+      VALUES (?, ?, ?, MD5(?), ?, ?)
     `;
 
     const params = [
@@ -17,7 +16,6 @@ export async function inserirUsuario(usuario) {
       usuario.email,
       usuario.senha,
       usuario.cpf,
-      usuario.bio || null,
       usuario.imagem_perfil || null
     ];
 

@@ -23,7 +23,7 @@ CREATE TABLE usuario (
   nome VARCHAR(255) NOT NULL,
   username VARCHAR(100) NOT NULL UNIQUE,
   email VARCHAR(255) NOT NULL UNIQUE,
-  senha VARCHAR(255) NOT NULL,
+  senha_hash VARCHAR(255) NOT NULL,
   imagem_perfil VARCHAR(255) DEFAULT NULL,
   data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -79,7 +79,7 @@ CREATE TABLE seguidores (
 -- 
 -- As senhas abaixo são hashes de exemplo. Substitua por hashes reais!
 
-INSERT INTO usuario (nome, username, email, senha) VALUES
+INSERT INTO usuario (nome, username, email, senha_hash) VALUES
 ('Allan Lopes', 'allanlopes', 'allan@email.com', '$2b$10$YourHashHere1234567890123456789012345678901234567890'),
 ('Lethicia Nobre', 'lethicianobre', 'lethicia@email.com', '$2b$10$YourHashHere1234567890123456789012345678901234567890'),
 ('Ana Carolina', 'anacarolina', 'ana@email.com', '$2b$10$YourHashHere1234567890123456789012345678901234567890'),

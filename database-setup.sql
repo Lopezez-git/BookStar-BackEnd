@@ -71,20 +71,7 @@ CREATE TABLE seguidores (
   CHECK (id_seguidor != id_seguido)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================
--- INSERIR USUÁRIOS DE EXEMPLO
--- ============================================
--- IMPORTANTE: Gere senhas reais com bcrypt!
--- Exemplo Node.js: const bcrypt = require('bcrypt'); 
---                  const hash = await bcrypt.hash('123456', 10);
--- 
--- As senhas abaixo são hashes de exemplo. Substitua por hashes reais!
 
--- ============================================
--- INSERIR LIVROS
--- ============================================
--- As imagens estão no GitHub em: storage/capa/
--- O backend serve essas imagens via: app.use('/storage', express.static('storage'))
 
 INSERT INTO livro (titulo, descricao, autores, capa_url) VALUES
 ('A Biblioteca Da Meia Noite', 'Nora Seed se sente perdida e cheia de arrependimentos. Em um momento de desespero, ela se vê em uma biblioteca misteriosa entre a vida e a morte, onde cada livro representa uma vida que ela poderia ter vivido.', 'Matt Haig', '/storage/capa/f5aeb25865254900e7998f8f0c89cb0c'),
